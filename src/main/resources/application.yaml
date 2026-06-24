@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: auth-server
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/authdb}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+app:
+  jwt:
+    # Base64-encoded secret (min 256 bits). MUST be overridden in production via JWT_SECRET env var.
+    secret: ${JWT_SECRET:bXlTdXBlclNlY3JldEtleVRoYXRJc0F0TGVhc3QyNTZCaXRzTG9uZ0ZvckRldmVsb3BtZW50T25seQ==}
+    access-token-expiration-ms: ${JWT_ACCESS_EXPIRATION:900000}
+    refresh-token-expiration-ms: ${JWT_REFRESH_EXPIRATION:604800000}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /api/v1
+  error:
+    include-message: always
+    include-binding-errors: always
+
+logging:
+  level:
+    com.vizavi.authserver: DEBUG
+    org.springframework.security: INFO
