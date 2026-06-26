@@ -5,19 +5,22 @@ import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Getter
-public class UserPrincipal implements UserDetails {
+public class UserPrincipal implements UserDetails, OAuth2User {
 
     private final UUID id;
     private final String email;
     private final String password;
     private final boolean enabled;
     private final Collection<? extends GrantedAuthority> authorities;
+    private Map<String, Object> attributes;
 
     public UserPrincipal(UUID id, String email, String password,
                          boolean enabled, Collection<? extends GrantedAuthority> authorities) {
@@ -36,8 +39,19 @@ public class UserPrincipal implements UserDetails {
                 user.isEnabled(), authorities);
     }
 
+    public static UserPrincipal create(User user, Map<String, Object> attributes) {
+        UserPrincipal principal = create(user);
+        principal.attributes = attributes;
+        return principal;
+    }
+
     @Override
     public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public String getName() {
         return email;
     }
 

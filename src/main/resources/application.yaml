@@ -23,6 +23,8 @@ spring:
     locations: classpath:db/migration
 
 app:
+  google:
+    client-id: ${GOOGLE_CLIENT_ID}
   jwt:
     # Base64-encoded secret (min 256 bits). MUST be overridden in production via JWT_SECRET env var.
     secret: ${JWT_SECRET:bXlTdXBlclNlY3JldEtleVRoYXRJc0F0TGVhc3QyNTZCaXRzTG9uZ0ZvckRldmVsb3BtZW50T25seQ==}

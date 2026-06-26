@@ -27,8 +27,15 @@ public class User {
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column(nullable = false)
+    @Column
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private AuthProvider provider;
+
+    @Column(length = 255)
+    private String providerId;
 
     @Builder.Default
     @Column(nullable = false)
