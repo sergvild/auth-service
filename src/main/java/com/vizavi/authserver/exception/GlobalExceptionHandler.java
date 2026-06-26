@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -43,6 +44,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleTokenRefresh(TokenRefreshException ex,
                                                             HttpServletRequest request) {
         return error(HttpStatus.UNAUTHORIZED, ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<ErrorResponse> handleDisabled(DisabledException ex, HttpServletRequest request) {
+        return error(HttpStatus.UNAUTHORIZED, "Please verify your email before signing in", request);
     }
 
     @ExceptionHandler(AuthenticationException.class)

@@ -4,6 +4,7 @@ import com.vizavi.authserver.dto.request.GoogleTokenRequest;
 import com.vizavi.authserver.dto.request.LoginRequest;
 import com.vizavi.authserver.dto.request.RefreshTokenRequest;
 import com.vizavi.authserver.dto.request.RegisterRequest;
+import com.vizavi.authserver.dto.request.VerifyEmailRequest;
 import com.vizavi.authserver.dto.response.AuthResponse;
 import com.vizavi.authserver.dto.response.MessageResponse;
 import com.vizavi.authserver.service.AuthService;
@@ -12,10 +13,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -27,9 +30,16 @@ public class AuthController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Register a new user")
-    public AuthResponse register(@Valid @RequestBody RegisterRequest request) {
+    @Operation(summary = "Register a new user — sends a verification email")
+    public MessageResponse register(@Valid @RequestBody RegisterRequest request) {
         return authService.register(request);
+    }
+
+    @PostMapping("/verify")
+    @Operation(summary = "Verify email address and receive tokens")
+    public AuthResponse verifyEmail(@Valid @RequestBody VerifyEmailRequest request) {
+        log.info("Verify email request received");
+        return authService.verifyEmail(request.token());
     }
 
     @PostMapping("/login")

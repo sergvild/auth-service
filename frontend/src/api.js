@@ -22,6 +22,13 @@ export const login = (email, password) =>
     body: JSON.stringify({ email, password })
   }).then(handle)
 
+export const verifyEmail = (token) =>
+  fetch(`${BASE}/verify`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token })
+  }).then(handle)
+
 export const googleAuth = (idToken) =>
   fetch(`${BASE}/google`, {
     method: 'POST',
